@@ -1,4 +1,6 @@
-﻿using System;
+﻿// This app is just used as a scratchpad for testing the GLEngine implementation
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,15 +12,28 @@ namespace GameLauncherDebug
     {
         static void Main(string[] args)
         {
-            var myGameController = GLEngine.GameController.GetInstance;
+            var myGameController = new GLEngine.GameController();
 
             //add some games
-            myGameController.AddGame(new GLEngine.Model.Game() { Title = "Doom", Description = "Doom test" });
-            myGameController.AddGame(new GLEngine.Model.Game() { Title = "Keen", Description = "Keen test" });
+            Console.WriteLine("Adding games");
+            myGameController.AddGame(GLEngine.Model.Game.CreateGame("Doom", "Doom test", "PC"));
+            myGameController.AddGame(GLEngine.Model.Game.CreateGame("Keen", "Keen test", "PC"));
+
+            ////Changing the games description on the ref list
+            //foreach (var item in myGameController.GetAllGames())
+            //{
+            //    item.Description += "111";
+            //}
+
+            //var internalGameList = myGameController.GetAllGames();
+            //var gameToUpdate = internalGameList[0];
+            //gameToUpdate.Title += "2222";
+
+            //myGameController.UpdateGame(gameToUpdate);
 
             foreach (var item in myGameController.GetAllGames())
             {
-                item.Description += "111";
+                myGameController.RemoveGame(item);
             }
 
             Console.WriteLine("Printing out all games :");

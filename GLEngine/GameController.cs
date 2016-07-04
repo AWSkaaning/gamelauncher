@@ -10,38 +10,89 @@ namespace GLEngine
 {
     public class GameController
     {
-        private static GameController _instance;
-        public static GameController GetInstance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new GameController();
-                }
-
-                return _instance;
-            }
-        }
-
+        private MapperConfiguration mapperConfig;                   //Configuration for the automapper lib.
         private List<Model.Game> Games = new List<Model.Game>();    //List to hold all the games in the application.
 
-        //Hidden to make this class a singelton
-        private GameController()
-        { }
+        public GameController()
+        {
+            //Seting up the automapper so it can map objects correctly
+            mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Model.Game, Model.Game>());
+        }
 
-
+        /// <summary>
+        /// Used for adding games to the internal list
+        /// </summary>
+        /// <param name="newGame"></param>
+        /// <returns></returns>
         public bool AddGame(Model.Game newGame)
         {
             bool wasGameAdded = false;
 
             if (newGame != null)
             {
-                Games.Add(newGame);
+                //Make sure a game has a unique id
+                if (newGame.Id == Guid.Empty)
+                {
+                    newGame.Id = Guid.NewGuid();
+                }
+
+                Games.Add(CopyGame(newGame));
                 wasGameAdded = true;
             }
 
             return wasGameAdded;
+        }
+
+        /// <summary>
+        /// Remove a game from the internal list
+        /// </summary>
+        /// <exception cref="InvalidOperationException">thrown when the game to delete is not found</exception>
+        /// <param name="game"></param>
+        /// <returns></returns>
+        public bool RemoveGame(Model.Game game)
+        {
+            bool wasGameRemoved = false;
+
+            if (game != null)
+            {
+                var gameToRemove = Games.Where(x => x.Id == game.Id).SingleOrDefault();
+                if (gameToRemove != null)
+                {
+                    Games.Remove(gameToRemove);
+                    wasGameRemoved = true;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Game was not found in internal game list");
+                }
+            }
+
+            return wasGameRemoved;
+        }
+
+        /// <summary>
+        /// Update a game with new changes
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns></returns>
+        public bool UpdateGame(Model.Game game)
+        {
+            bool wasGameupdated = false;
+
+            if (game != null)
+            {
+                var gameFromStore = Games.Where(x => x.Id == game.Id).SingleOrDefault();
+                if (gameFromStore != null)
+                {
+                    Games.Remove(gameFromStore);
+                    AddGame(game);
+                    
+                    gameFromStore = game;
+                    wasGameupdated = true;
+                }
+            }
+
+            return wasGameupdated;
         }
 
         /// <summary>
@@ -52,21 +103,32 @@ namespace GLEngine
         /// </remarks>
         /// <returns></returns>
         public List<Model.Game> GetAllGames()
-        {
-            /*Using the fantastic automapper tool to make the items copying a bit easier
-             * it may be a bit overkill for this simple task... but it sure makes it easy.*/
-            var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Model.Game, Model.Game>());
-            var mapper = mapperConfig.CreateMapper();
-
+        {           
             List<Model.Game> result = new List<Model.Game>();
 
             foreach (var item in Games)
-            {                
-                Model.Game gameCopy = mapper.Map<Model.Game>(item);
-                result.Add(gameCopy);
+            {
+                result.Add(CopyGame(item));
             }
 
             return result;
+        }
+
+
+        /// <summary>
+        /// Used to obtain a deep-copy of a game object
+        /// </summary>
+        /// <param name="orgGame"></param>
+        /// <returns></returns>
+        private Model.Game CopyGame(Model.Game orgGame)
+        {
+            /*Using the fantastic automapper tool to make the items copying a bit easier
+             * it may be a bit overkill for this simple task... but it sure makes it easy.*/
+            var mapper = mapperConfig.CreateMapper();
+
+            Model.Game gameCopy = mapper.Map<Model.Game>(orgGame);
+
+            return gameCopy;
         }
     }
 }
