@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datastore.cs" />
     <Compile Include="GameController.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

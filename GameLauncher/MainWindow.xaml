@@ -4,9 +4,99 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameLauncher"
+        xmlns:VM="clr-namespace:GameLauncher.ViewModel"
+        xmlns:views="clr-namespace:GameLauncher.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="GL" Height="400" Width="700" MinWidth="700"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" Loaded="Window_Loaded">
+
+    <Window.Resources>
+
+        <DataTemplate DataType="{x:Type VM:EditGameViewModel}">
+            <views:EditGameView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type VM:GameViewModel}">
+            <views:GameView />
+        </DataTemplate>
+
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Menu bar -->
+        <Grid Grid.Row="0">
+
+            <ItemsControl ItemsSource="{Binding NavItems}" HorizontalAlignment="Right"  VerticalAlignment="Center" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,5,0" ToolTip="{Binding Caption}" Background="Transparent">
+                            <!-- Selection animation -->
+                            <Grid.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)"
+                                                                            To="Gray" Duration="0:0:0.250"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)"
+                                                                            From="Gray" To="Transparent" Duration="0:0:0.250"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <Image Width="12" Height="12" Stretch="Uniform" PreviewMouseUp="Image_PreviewMouseUp" Tag="{Binding Index}">
+                                <!-- Set the rigth icon -->
+                                <Image.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Index}" Value="1">
+                                                <Setter Property="Image.Source" Value="{StaticResource ImageListIcon}" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Index}" Value="2">
+                                                <Setter Property="Image.Source" Value="{StaticResource DetailsListIcon}" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Index}" Value="3">
+                                                <Setter Property="Image.Source" Value="{StaticResource AddIcon}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+            </ItemsControl>
+        </Grid>
+
+        <!-- Content view -->
+        <ContentControl Grid.Row="1" Content="{Binding Appstate.Viewhandler.CurrentView}" Focusable="False" />
+
     </Grid>
 </Window>

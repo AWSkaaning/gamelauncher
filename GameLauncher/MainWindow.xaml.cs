@@ -24,5 +24,22 @@ namespace GameLauncher
         {
             InitializeComponent();
         }
+
+        private void Image_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {            
+            var index = Int32.Parse(((Image)sender).Tag.ToString());
+            ChangeView(index);
+        }
+      
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ChangeView(1); //Default start-up view
+        }
+
+        private void ChangeView(int index)
+        {
+            var dc = this.DataContext as ViewModel.MainViewModel;
+            dc.ChangeView(index);
+        }
     }
 }
