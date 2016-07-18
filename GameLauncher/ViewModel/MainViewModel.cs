@@ -1,9 +1,7 @@
 using GalaSoft.MvvmLight;
-using System;
+using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
-using System.Reflection;
-using System.Windows.Media.Imaging;
-
+using System;
 using System.Windows.Input;
 
 namespace GameLauncher.ViewModel
@@ -18,16 +16,6 @@ namespace GameLauncher.ViewModel
             }
         }
 
-        private ObservableCollection<Model.NavItem> _navItems = new ObservableCollection<Model.NavItem>();
-        public ObservableCollection<Model.NavItem> NavItems
-        {
-            get { return _navItems; }
-            set { _navItems = value; }
-        }        
-
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
         public MainViewModel()
         {
             //Setting up the nav menu buttons
@@ -36,65 +24,73 @@ namespace GameLauncher.ViewModel
 
         private void SetupNavMenu()
         {
-            //Big icon game list
-            var bigiconView = new Model.NavItem()
+            //Game view
+            var gameView = new Model.NavItem()
             {
-                Caption = "Big Icon view",
+                Caption = "Games",
                 IsSelected = false,
+                ClassName = typeof(ViewModel.GameViewModel).Name,
                 Index = 1
             };
-            NavItems.Add(bigiconView);
-
-            //Details game list
-            var detailsListView = new Model.NavItem()
-            {
-                Caption = "Details list view",
-                IsSelected = false,
-                Index = 2
-            };
-            NavItems.Add(detailsListView);
+            Appstate.NavItems.Add(gameView);
 
             //Add new game
             var addGame = new Model.NavItem()
             {
                 Caption = "Add new game",
                 IsSelected = false,
-                Index = 3
+                ClassName = typeof(ViewModel.EditGameViewModel).Name,
+                Index = 2
             };
-            NavItems.Add(addGame);
+            Appstate.NavItems.Add(addGame);
+
+            //About view
+            var aboutView = new Model.NavItem()
+            {
+                Caption = "About",
+                IsSelected = false,
+                ClassName = typeof(ViewModel.AboutViewModel).Name,
+                Index = 4
+            };
+            Appstate.NavItems.Add(aboutView);
+        }
+        
+        public bool SaveData()
+        {
+            var result = Appstate.GameController.SaveGameData(Appstate.GameDataPath);
+            return result;
+        }
+
+        public void LoadGameData()
+        {
+            if (Appstate.GameController.DoesGameDataExist(Appstate.GameDataPath))
+            {
+                Appstate.GameController.LoadGameData(Appstate.GameDataPath);
+            }          
         }
 
         public void ChangeView(int index)
         {
-            //Change the IsSelected to the selected NavItem
-            foreach (var item in NavItems)
-            {
-                if (item.IsSelected == true && item.Index != index)
-                {
-                    item.IsSelected = false;
-                }
-
-                if (item.IsSelected == false && item.Index == index)
-                {
-                    item.IsSelected = true;
-                }
-            }
-
             //Change to the right viewmodel (view)
             switch (index)
             {
                 case 1:
-                    Appstate.Viewhandler.ChangeView(new ViewModel.GameViewModel(), true);
+                    Appstate.ChangeView(new ViewModel.GameViewModel(), true);
                     break;
                 case 2:
+                    Appstate.ChangeView(new ViewModel.EditGameViewModel(), true);
                     break;
-                case 3:
-                    Appstate.Viewhandler.ChangeView(new ViewModel.EditGameViewModel(), true);
-                    break;
-                default:
+                case 4:
+                    Appstate.ChangeView(new ViewModel.AboutViewModel(), true);
                     break;
             }
-        }        
+        }
+
+        public void Initialize()
+        {
+            LoadGameData();
+            ChangeView(1);
+        }
 
     }
 }

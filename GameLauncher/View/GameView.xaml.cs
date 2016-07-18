@@ -24,5 +24,11 @@ namespace GameLauncher.View
         {
             InitializeComponent();
         }
+
+        private void ClearSearch_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.GameData.SearchQuery = "";
+        }
     }
 }

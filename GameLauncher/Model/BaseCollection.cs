@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/* 
+ * A simple base class for implementing a CollectionView and easily adding filters
+ */
 
 using System.ComponentModel;
 using System.Collections.ObjectModel;
@@ -19,7 +17,10 @@ namespace GameLauncher.Model
         {
             Items = new ObservableCollection<T>();
         }
-                
+
+        /// <summary>
+        /// Used to refresh the collection view after items are added or removed
+        /// </summary>
         public void CollectionUpdate()
         {
             CreateCollection();
@@ -35,11 +36,13 @@ namespace GameLauncher.Model
             return true;
         }
 
+        /// <summary>
+        /// Updates the collection view and makes sure items are filtered.
+        /// </summary>
         public void FilterUpdate()
         {
             ItemsCollection.Refresh();
         }
-
 
         private void CreateCollection()
         {

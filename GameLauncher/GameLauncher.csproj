@@ -77,13 +77,18 @@
     </ApplicationDefinition>
     <Compile Include="AppState.cs" />
     <Compile Include="Model\BaseCollection.cs" />
+    <Compile Include="Model\GameViewData.cs" />
     <Compile Include="Model\NavItem.cs" />
     <Compile Include="PropertyChangedNotification.cs" />
     <Compile Include="ViewHandler.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\EditGameViewModel.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditGameView.xaml.cs">
       <DependentUpon>EditGameView.xaml</DependentUpon>
     </Compile>
@@ -105,6 +110,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditGameView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,6 +172,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\SearchIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\DeleteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\HelpIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

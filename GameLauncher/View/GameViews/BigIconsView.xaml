@@ -5,9 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameLauncher.View.GameViews"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Margin="5">
-        <ListBox ItemsSource="{Binding GamesCollection.ItemsCollection}">
+             d:DesignHeight="300" d:DesignWidth="500">
+    
+    <Grid Background="White">
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="150" />
+        </Grid.RowDefinitions>
+
+        <!-- Game list -->
+        <ListBox Grid.Row="0"
+                 Margin="5"
+                 ItemsSource="{Binding GameData.ItemsCollection}" 
+                 Name="GameList"
+                 BorderThickness="0" 
+                 MouseDoubleClick="GameList_MouseDoubleClick"
+                 IsSynchronizedWithCurrentItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="5">
@@ -16,5 +30,85 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <!-- Selected game datails -->
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#FFAEAEAE" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="120" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Game picture and details -->
+            <Grid Grid.Column="0" Margin="20,0,5,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="95" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!-- Picture -->
+                <Border Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Background="LightBlue"
+                        Width="80"
+                        Height="100"
+                        Margin="5">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Opacity="0.5"/>
+                    </Border.Effect>
+                </Border>
+
+                <!-- Details -->
+                <Grid Grid.Column="1"
+                      Margin="5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Title-->
+                    <TextBlock Grid.Row="0"  Text="{Binding GameData.ItemsCollection/Title}" 
+                                FontWeight="SemiBold"/>
+
+                    <!-- Description -->
+                    <ScrollViewer Grid.Row="1"
+                                  CanContentScroll="True"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <TextBlock Text="{Binding GameData.ItemsCollection/Description}"
+                                   TextWrapping="Wrap"/>
+                    </ScrollViewer>
+
+                </Grid>
+
+            </Grid>
+
+            <!-- Buttons -->
+            <Grid Grid.Column="1" 
+                  Margin="5,0,20,0">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!-- Launch button -->
+                <Button Grid.Row="0" Height="30"                        
+                        VerticalAlignment="Top">Launch</Button>
+
+            </Grid>
+
+        </Grid>
+
     </Grid>
 </UserControl>

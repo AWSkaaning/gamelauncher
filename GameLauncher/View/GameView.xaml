@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:GameLauncher.View.GameViews"
              xmlns:local="clr-namespace:GameLauncher.View"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="700">
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -23,14 +23,14 @@
             
             <!-- View select -->
             
-            <!-- Search -->
+            <!-- Search bar -->
             <Border Grid.Column="1" Margin="5" Width="300" HorizontalAlignment="Right"
                     CornerRadius="10" BorderBrush="LightGray" BorderThickness="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20" />
                         <ColumnDefinition />
-                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     
                     <!-- Icon -->
@@ -38,7 +38,21 @@
                            Width="12" Height="12" Stretch="Uniform" HorizontalAlignment="Left" />
                     
                     <!-- Search box -->
-                    <TextBox Grid.Column="1" BorderThickness="0" />
+                    <TextBox Grid.Column="1" BorderThickness="0" Text="{Binding GameData.SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+                    
+                    <!-- Delete search -->
+                    <Image Grid.Column="2" Source="{StaticResource DeleteIcon}" x:Name="ClearSearch"
+                           Width="12" Height="12" Stretch="Uniform" MouseUp="ClearSearch_MouseUp">
+                        <Image.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding GameData.SearchQuery}" Value="">
+                                        <Setter Property="Image.Opacity" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
 
                 </Grid>
             </Border>

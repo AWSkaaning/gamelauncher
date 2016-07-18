@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncher", "GameLaunche
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLEngine", "..\GLEngine\GLEngine.csproj", "{8360229A-84E1-4FDD-9B13-BD2FA872CD2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncherDebug", "..\GameLauncherDebug\GameLauncherDebug.csproj", "{C1CBFC88-4DA3-4413-B69B-9839D747D602}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLEngineTest", "..\GLEngineTest\GLEngineTest.csproj", "{E63944F1-02EF-4095-ACF4-4511DCAF7BBE}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{8360229A-84E1-4FDD-9B13-BD2FA872CD2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8360229A-84E1-4FDD-9B13-BD2FA872CD2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8360229A-84E1-4FDD-9B13-BD2FA872CD2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1CBFC88-4DA3-4413-B69B-9839D747D602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1CBFC88-4DA3-4413-B69B-9839D747D602}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1CBFC88-4DA3-4413-B69B-9839D747D602}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1CBFC88-4DA3-4413-B69B-9839D747D602}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E63944F1-02EF-4095-ACF4-4511DCAF7BBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E63944F1-02EF-4095-ACF4-4511DCAF7BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E63944F1-02EF-4095-ACF4-4511DCAF7BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU

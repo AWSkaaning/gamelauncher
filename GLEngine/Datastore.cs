@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GLEngine
 {
-    internal class Datastore
+    public class Datastore
     {
-        public List<Model.Game> Games = new List<Model.Game>();    //List to hold all the game data.
+        //List to hold all the game data.
+        public List<Model.Game> Games = new List<Model.Game>();    
     }
 }

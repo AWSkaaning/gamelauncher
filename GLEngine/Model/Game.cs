@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.ComponentModel;
 
 namespace GLEngine.Model
@@ -66,6 +61,11 @@ namespace GLEngine.Model
                 
                 return result;
             }
+        }
+
+        public Game Clone()
+        {
+            return (Game)this.MemberwiseClone();
         }
     }
 }

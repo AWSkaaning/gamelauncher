@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,25 +14,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GameLauncher.View.GameViews
+namespace GameLauncher.View
 {
     /// <summary>
-    /// Interaction logic for BigIconsView.xaml
+    /// Interaction logic for AboutView.xaml
     /// </summary>
-    public partial class BigIconsView : UserControl
+    public partial class AboutView : UserControl
     {
-        public BigIconsView()
+        public AboutView()
         {
             InitializeComponent();
         }
 
-        private void GameList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            if (GameList.SelectedItem != null)
-            {
-                var dc = this.DataContext as ViewModel.GameViewModel;
-                dc.EditGame((GLEngine.Model.Game)GameList.SelectedItem);
-            }
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

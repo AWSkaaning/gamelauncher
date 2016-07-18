@@ -26,14 +26,15 @@ namespace GameLauncher
         }
 
         private void Image_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {            
+        {
             var index = Int32.Parse(((Image)sender).Tag.ToString());
             ChangeView(index);
         }
-      
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ChangeView(1); //Default start-up view
+            var dc = this.DataContext as ViewModel.MainViewModel;
+            dc.Initialize();
         }
 
         private void ChangeView(int index)
@@ -41,5 +42,21 @@ namespace GameLauncher
             var dc = this.DataContext as ViewModel.MainViewModel;
             dc.ChangeView(index);
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (MessageBox.Show("Save gamedata?", "Save?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var dc = this.DataContext as ViewModel.MainViewModel;
+                var result = dc.SaveData();
+
+                if (result == false)
+                {
+                    //TODO: Throw error and cancel closing so data loss is hopefully prevented.
+                    //e.Cancel = true; //Good error logic must be in place!!!
+                }
+            }
+        }
+
     }
 }

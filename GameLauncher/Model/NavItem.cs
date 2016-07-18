@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-
+﻿
 namespace GameLauncher.Model
 {
     public class NavItem : PropertyChangedNotification
     {
         public string Caption { get; set; }
         public int Index { get; set; }
+        public string ClassName { get; set; }
 
         private bool _isSelected;
         public bool IsSelected
@@ -21,7 +16,6 @@ namespace GameLauncher.Model
                 _isSelected = value;
                 NotifyPropertyChanged("IsSelected");
             }
-        }
-
+        }        
     }
 }
