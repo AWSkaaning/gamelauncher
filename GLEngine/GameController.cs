@@ -173,8 +173,15 @@ namespace GLEngine
             return wasDataLoaded;
         }
 
+
+        /// <summary>
+        /// Checks if a gamedata file exists on the given path.
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
         public bool DoesGameDataExist(string filepath)
         {
+            //TODO: Should have a more rigid checking method. (Maybe a Schema)
             return File.Exists(filepath);
         }
 

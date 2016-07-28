@@ -5,12 +5,13 @@
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:GameLauncher.ViewModel" />
 
             <!-- Image assets -->
+            <BitmapImage UriSource="/Assets/Images/SearchIcon.png" x:Key="SearchIcon" />
+            <BitmapImage UriSource="/Assets/Images/AboutIcon.png" x:Key="AboutIcon" />
+            <BitmapImage UriSource="/Assets/Images/DeleteIcon.png" x:Key="DeleteIcon" />
+            <BitmapImage UriSource="/Assets/images/AddIcon.png" x:Key="AddIcon" />
             <BitmapImage UriSource="/Assets/Images/ListIcon.png" x:Key="DetailsListIcon" />
             <BitmapImage UriSource="/Assets/Images/BigIcons.png" x:Key="ImageListIcon" />
-            <BitmapImage UriSource="/Assets/images/AddIcon.png" x:Key="AddIcon" />
-            <BitmapImage UriSource="/Assets/Images/SearchIcon.png" x:Key="SearchIcon" />
-            <BitmapImage UriSource="/Assets/Images/DeleteIcon.png" x:Key="DeleteIcon" />
-            <BitmapImage UriSource="/Assets/Images/HelpIcon.png" x:Key="AboutIcon" />
+            <BitmapImage UriSource="/Assets/Images/NoImageIcon.png" x:Key="NoImageIcon" />
 
         </ResourceDictionary>
     </Application.Resources>

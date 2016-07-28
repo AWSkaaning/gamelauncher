@@ -76,9 +76,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppState.cs" />
+    <Compile Include="Converter\FilePathToThumbnailConverter.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="Model\BaseCollection.cs" />
     <Compile Include="Model\GameViewData.cs" />
     <Compile Include="Model\NavItem.cs" />
+    <Compile Include="Model\Settings.cs" />
     <Compile Include="PropertyChangedNotification.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />
@@ -162,13 +165,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\BigIcons.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\ListIcon.png" />
+    <Resource Include="Assets\Images\NoImageIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\AddIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\AboutIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\SearchIcon.png" />
@@ -177,7 +180,10 @@
     <Resource Include="Assets\Images\DeleteIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\HelpIcon.png" />
+    <Resource Include="Assets\Images\ListIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\BigIcons.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

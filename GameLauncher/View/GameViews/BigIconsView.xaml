@@ -4,35 +4,129 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameLauncher.View.GameViews"
+             xmlns:conv="clr-namespace:GameLauncher.Converter"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
-    
+
+    <UserControl.Resources>
+        <conv:FilePathToThumbnailConverter x:Key="ThumbnailConverter" />
+    </UserControl.Resources>
+
     <Grid Background="White">
 
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0" />
         </Grid.RowDefinitions>
 
+        <!-- Empty message -->
+        <TextBlock Grid.Row="0" 
+                   Text="It's empty in here, you should add some games :)" 
+                   FontSize="20" FontWeight="Light"
+                   Margin="5">
+            <TextBlock.Style>
+                <Style>
+                    <Setter Property="TextBlock.Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding GameData.Items.Count}" Value="0">
+                            <Setter Property="TextBlock.Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
         <!-- Game list -->
-        <ListBox Grid.Row="0"
-                 Margin="5"
-                 ItemsSource="{Binding GameData.ItemsCollection}" 
-                 Name="GameList"
-                 BorderThickness="0" 
-                 MouseDoubleClick="GameList_MouseDoubleClick"
-                 IsSynchronizedWithCurrentItem="True">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="5">
-                        <TextBlock Text="{Binding Title}" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ScrollViewer Grid.Row="1" Margin="5"
+                      CanContentScroll="True"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding GameData.ItemsCollection}" 
+                          Name="GameList"
+                          BorderThickness="0">
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="10,5,10,5"
+                            Height="230"
+                              Name="GameItemGrid">
+
+                            <!-- Cover image -->
+                            <Image x:Name="GameCoverImage" Width="200" MinHeight="230" Stretch="Uniform"
+                                   VerticalAlignment="Top"
+                                   Source="{Binding ., Converter={StaticResource ThumbnailConverter}}" >
+                                <Image.Effect>
+                                    <DropShadowEffect Opacity="0.8"/>
+                                </Image.Effect>
+                            </Image>
+
+                            <!-- Game Action buttons -->
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                
+                                <StackPanel Grid.Row="1">
+                                    <Button Margin="5" Width="80" Name="LaunchGameBtn" Click="LaunchGameBtn_Click" Tag="{Binding Id}">Launch</Button>
+                                    <Button Margin="5" Width="80" Name="EditBtn" Click="EditBtn_Click" Tag="{Binding Id}">Edit</Button>
+                                </StackPanel>
+
+                                <Grid Grid.Row="2">
+                                    <TextBlock  Text="{Binding Title}" TextWrapping="WrapWithOverflow" 
+                                               VerticalAlignment="Bottom"
+                                               Background="LightGray" />
+                                </Grid>
+
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+
+                                        <Setter Property="Opacity" Value="0" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=GameItemGrid, Path=IsMouseOver}" Value="true">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                             Duration="0:0:0.250" To="1.0" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                             Duration="0:0:0.250" To="0.0" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+
+                            </Grid>
+
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+            </ItemsControl>
+        </ScrollViewer>
 
         <!-- Selected game datails -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2" Visibility="Collapsed">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="White" Offset="0"/>
@@ -46,7 +140,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Game picture and details -->
-            <Grid Grid.Column="0" Margin="20,0,5,0">
+            <Grid Grid.Column="0" Name="GameDetailPanel" Margin="20,0,5,0">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="95" />
@@ -96,17 +190,27 @@
             <!-- Buttons -->
             <Grid Grid.Column="1" 
                   Margin="5,0,20,0">
-                
+
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <!-- Launch button -->
-                <Button Grid.Row="0" Height="30"                        
-                        VerticalAlignment="Top">Launch</Button>
-
             </Grid>
+
+            <!-- Styles and triggers -->
+            <Grid.Style>
+                <Style>
+                    <Style.Triggers>
+
+                        <!-- Hide panel if there is't a game selected -->
+                        <DataTrigger Binding="{Binding GameData.ItemsCollection/}" Value="{x:Null}">
+                            <Setter Property="Grid.Visibility" Value="Collapsed" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
 
         </Grid>
 

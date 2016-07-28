@@ -48,5 +48,34 @@ namespace GameLauncher.View
             }
         }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadThumbnail();
+        }
+        
+        private void CoverImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog fileDia = new Microsoft.Win32.OpenFileDialog();
+            fileDia.Title = "Select cover image";
+            fileDia.Filter = "Images|*.jpg;*.png";
+            fileDia.FilterIndex = 0;
+            fileDia.Multiselect = false;
+
+            if (fileDia.ShowDialog() == true)
+            {
+                var dc = this.DataContext as ViewModel.EditGameViewModel;
+                dc.Game.CoverImagePath = fileDia.FileName;
+                LoadThumbnail();
+            }
+        }
+
+        private void LoadThumbnail()
+        {
+            var dc = this.DataContext as ViewModel.EditGameViewModel;
+            if (dc.Game.HasCoverImage)
+            {
+                CoverImage.Source = ImageHelper.GenerateThumbnail(dc.Game.CoverImagePath, 200);
+            }
+        }
     }
 }

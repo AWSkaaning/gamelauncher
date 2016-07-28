@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameLauncher.View"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="410" d:DesignWidth="600" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBox}" >
@@ -38,11 +38,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400" />
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
@@ -94,45 +95,125 @@
                               HorizontalAlignment="Left" Width="300" IsEditable="True" />
                 </Grid>
 
-                <!-- Image filepath -->
-                <TextBlock Text="Image path" Margin="0,5,0,0" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30" />
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0" Margin="0,0,5,0">...</Button>
-
-                    <TextBox Grid.Column="1" Text="{Binding Game.ImageFilePath}" IsReadOnly="True" />
-
-                </Grid>
-
                 <!-- Execute Command -->
                 <TextBlock Margin="0,10,0,0" Text="Command : " />
                 <TextBox Text="{Binding Game.StartCommand, UpdateSourceTrigger=PropertyChanged,
-                                ValidatesOnDataErrors=True, NotifyOnValidationError=True}" Validation.Error="Validation_Error" />
+                                ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                         Validation.Error="Validation_Error"
+                         Height="60"
+                         TextWrapping="WrapWithOverflow" />
 
                 <!-- Buttons -->
                 <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+
                     <Button x:Name="okBtn" Width="60" Margin="0,0,5,0" 
-                            Command="{Binding AcceptCommand}">Save</Button>
-                    <Button Width="60" Command="{Binding CancelCommand}">Cancel</Button>
+                            Command="{Binding AcceptCommand}" Content="Save" />
+
+                    <Button Width="60" Command="{Binding CancelCommand}" Content="Cancel" />
+
                 </StackPanel>
 
             </StackPanel>
         </Grid>
 
         <!-- Image preview -->
-        <Border Grid.Row="1" Grid.Column="1" 
-                Margin="0,17,0,0"
-                VerticalAlignment="Top" 
-                HorizontalAlignment="Left"
-                CornerRadius="3" ClipToBounds="True" 
-                BorderThickness="1"
-                BorderBrush="Black">
-            <Rectangle Fill="LightBlue" Width="100" Height="100" />
-        </Border>
+        <Grid Grid.Row="1" Grid.Column="1" 
+              Name="PictureGrid"
+              Margin="0,17,0,0"
+              VerticalAlignment="Top" 
+              HorizontalAlignment="Left" >
+            <!-- Cover image -->
+            <Image Width="200" MinHeight="230"
+                   Stretch="Uniform"
+                   Name="CoverImage" MouseLeftButtonUp="CoverImage_MouseLeftButtonUp">
+
+            <Image.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Game.HasCoverImage}" Value="false">
+                            <Setter Property="Image.Source" Value="{StaticResource NoImageIcon}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+
+                </Style>
+            </Image.Style>
+
+            </Image>
+
+            <!-- Picture info text overlay-->
+            <Grid VerticalAlignment="Bottom" 
+                  Background="#FFE4E4E4" >
+
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Opacity" Value="0" />
+
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding ElementName=PictureGrid, Path=IsMouseOver}" Value="true">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             Duration="0:0:0.250"
+                                                             To="1.0" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             Duration="0:0:0.250"
+                                                             To="0.0" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                            
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <TextBlock Text="Click to change picture" FontSize="14" />
+                                                
+            </Grid>
+
+        </Grid>
+
+        <!-- Status message -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" >
+            <TextBlock x:Name ="statusMessage">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CreatingNew}" Value="true">
+                                <Setter Property="TextBlock.Text" Value="Game added" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding CreatingNew}" Value="false">
+                                <Setter Property="TextBlock.Text" Value="Game updated" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <Grid.Style>
+                <Style>
+                    <Setter Property="Grid.Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ChangesSaved}" Value="true">
+                            <Setter Property="Grid.Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+
+                </Style>
+            </Grid.Style>
+
+        </Grid>
 
     </Grid>
+    
 </UserControl>

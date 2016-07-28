@@ -23,15 +23,27 @@ namespace GameLauncher.View.GameViews
         public BigIconsView()
         {
             InitializeComponent();
+        }       
+
+        private void LaunchGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            var btn = sender as Button;
+            var gameId = Guid.Parse(btn.Tag.ToString());
+            var game = dc.GameData.Items.Where(x => x.Id == gameId).SingleOrDefault();
+
+            if (game != null)
+            {
+                dc.LaunchGame(game);
+            }
+                        
         }
 
-        private void GameList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void EditBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (GameList.SelectedItem != null)
-            {
-                var dc = this.DataContext as ViewModel.GameViewModel;
-                dc.EditGame((GLEngine.Model.Game)GameList.SelectedItem);
-            }
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            var gameId = Guid.Parse(((Button)sender).Tag.ToString());
+            dc.EditGame(gameId);
         }
     }
 }

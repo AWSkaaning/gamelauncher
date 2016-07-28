@@ -10,13 +10,7 @@ namespace GameLauncher.ViewModel
 {
     public class AboutViewModel : ViewModelBase
     {
-        public string Title { get; set; }
-        public string Content { get; set; }
-
         public AboutViewModel()
-        {
-            Title = "Game Lanucher";
-            Content = "Icons by iconmonstr.com";
-        }
+        { }
     }
 }

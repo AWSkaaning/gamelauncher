@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Diagnostics;
+using GalaSoft.MvvmLight;
+using System;
+using System.Linq;
 
 namespace GameLauncher.ViewModel
 {
@@ -22,6 +25,8 @@ namespace GameLauncher.ViewModel
             set { _gameData = value; }
         }
 
+        AppState appstate = AppState.GetInstance;
+
         public GameViewModel()
         {
             BigIconView = true;
@@ -29,10 +34,37 @@ namespace GameLauncher.ViewModel
         }
 
         public void EditGame(GLEngine.Model.Game game)
-        {
-            var appstate = AppState.GetInstance;
+        {            
             appstate.ChangeView(new ViewModel.EditGameViewModel(game), false);
         }
 
+        public void EditGame(Guid gameId)
+        {
+            var game = appstate.GameController.GetAllGames().Where(x => x.Id == gameId).SingleOrDefault();
+            if (game != null)
+            {
+                appstate.ChangeView(new ViewModel.EditGameViewModel(game), false);
+            }
+        }
+
+        public void LaunchGame(GLEngine.Model.Game game)
+        {
+            /***************************************************
+             * TODO: This needs to be refactored!!             *
+             * *************************************************/
+            var emuApp = new ProcessStartInfo();
+            var inputString = game.StartCommand.Split(' ');
+            
+            var argString = "";
+            for (int i = 1; i < inputString.Length; i++)
+            {
+                argString += inputString[i] + " ";
+            }
+
+            emuApp.FileName = inputString[0];
+            emuApp.Arguments = argString;
+
+            Process.Start(emuApp);
+        }
     }    
 }

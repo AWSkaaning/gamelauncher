@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Windows.Input;
@@ -8,6 +8,17 @@ namespace GameLauncher.ViewModel
 {
     public class EditGameViewModel : ViewModelBase
     {
+        private bool _changesSaved = false;
+        public bool ChangesSaved
+        {
+            get { return _changesSaved; }
+            set
+            {
+                _changesSaved = value;
+                RaisePropertyChanged("ChangesSaved");
+            }
+        }
+
         public bool CreatingNew { get; set; }
         public GLEngine.Model.Game Game { get; set; }
 
@@ -21,6 +32,17 @@ namespace GameLauncher.ViewModel
             set { _platformSuggestions = value; }
         }
 
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get { return _statusMessage; }
+            set
+            {
+                _statusMessage = value;
+                RaisePropertyChanged("StatusMessage");
+            }
+        }
+
         #region Constructors and helpers
         public EditGameViewModel()
         {
@@ -30,8 +52,18 @@ namespace GameLauncher.ViewModel
             ConstructorHelper();
         }
 
+        /// <summary>
+        /// Ctor used when editing a game.
+        /// </summary>
+        /// <exception cref="NullReferenceException">Thrown if input is null</exception>
+        /// <param name="game"></param>
         public EditGameViewModel(GLEngine.Model.Game game)
         {
+            if (game == null)
+            {
+                throw new NullReferenceException("Input game cannot be null!");
+            }
+
             CreatingNew = false;
             Game = game.Clone();
 
@@ -42,7 +74,7 @@ namespace GameLauncher.ViewModel
         /// Initializes default stuff that is needed no matter what constructor is called
         /// </summary>
         private void ConstructorHelper()
-        {            
+        {
             SettingUpCommands();
             PlatformSuggestions = GetPlatforms();
         }
@@ -73,13 +105,18 @@ namespace GameLauncher.ViewModel
         {
             if (Game != null)
             {
-                if (CreatingNew)
+                if (ChangesSaved == false)
                 {
-                    AppState.GetInstance.GameController.AddGame(Game);
-                }
-                else
-                {
-                    AppState.GetInstance.GameController.UpdateGame(Game);
+                    if (CreatingNew)
+                    {
+                        AppState.GetInstance.GameController.AddGame(Game);
+                    }
+                    else
+                    {
+                        AppState.GetInstance.GameController.UpdateGame(Game);
+                    }
+
+                    ChangesSaved = true;
                 }
             }
         }

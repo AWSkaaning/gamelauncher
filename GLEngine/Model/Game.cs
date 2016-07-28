@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace GLEngine.Model
 {
-    public class Game : IDataErrorInfo
+    public class Game : IDataErrorInfo, INotifyPropertyChanged
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -11,13 +13,40 @@ namespace GLEngine.Model
         public int Rank { get; set; }
         public string Platform { get; set; }
 
-        public string ImageFilePath { get; set; }
+        [XmlIgnore]
+        private string _coverImagePath = "";
+        public string CoverImagePath
+        {
+            get { return _coverImagePath; }
+            set
+            {
+                _coverImagePath = value;
+                NotifyPropertyChanged("CoverImagePath");
+                NotifyPropertyChanged("HasCoverImage");
+            }
+        }
+
         public string StartDirectory { get; set; }
         public string StartCommand { get; set; }
 
-        //Hidden to make sure that a new game object is created through the CreateGame method
+        [XmlIgnore]
+        public bool HasCoverImage
+        {
+            get
+            {
+                var result = false;
+                if (string.IsNullOrEmpty(CoverImagePath) == false)
+                {
+                    result = true;
+                }
+
+                return result;
+            }
+        }
+
+        //Hidden to make sure that a new game object is only created through the CreateGame method
         private Game()
-        { }
+        { }        
 
         public static Model.Game CreateGame(string title, string description, string platform)
         {
@@ -26,10 +55,12 @@ namespace GLEngine.Model
             newGame.Title = title;
             newGame.Description = description;
             newGame.Platform = platform;
+            newGame.CoverImagePath = "";
 
             return newGame;
         }
 
+        [XmlIgnore]
         public string Error
         {
             get
@@ -38,6 +69,7 @@ namespace GLEngine.Model
             }
         }
 
+        [XmlIgnore]
         public string this[string columnName]
         {
             get
@@ -58,7 +90,7 @@ namespace GLEngine.Model
                         result = "A game must have a command to run";
                     }
                 }
-                
+
                 return result;
             }
         }
@@ -66,6 +98,20 @@ namespace GLEngine.Model
         public Game Clone()
         {
             return (Game)this.MemberwiseClone();
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // This method is called by the Set accessor of each property.
+        // The CallerMemberName attribute that is applied to the optional propertyName
+        // parameter causes the property name of the caller to be substituted as an argument.
+        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }
