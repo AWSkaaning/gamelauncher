@@ -90,7 +90,7 @@ namespace GameLauncher.ViewModel
         {
             LoadGameData();
             ChangeView(1);
-        }
+        } 
 
     }
 }

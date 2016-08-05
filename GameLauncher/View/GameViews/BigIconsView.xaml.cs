@@ -23,7 +23,7 @@ namespace GameLauncher.View.GameViews
         public BigIconsView()
         {
             InitializeComponent();
-        }       
+        }
 
         private void LaunchGameBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -36,7 +36,6 @@ namespace GameLauncher.View.GameViews
             {
                 dc.LaunchGame(game);
             }
-                        
         }
 
         private void EditBtn_Click(object sender, RoutedEventArgs e)

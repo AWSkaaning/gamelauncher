@@ -48,71 +48,82 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="10,5,10,5"
-                            Height="230"
-                              Name="GameItemGrid">
+                        <Border Margin="10,5,10,5"
+                                Height="230"
+                                Name="GameItemGrid"
+                                BorderThickness="1"
+                                BorderBrush="Gray"
+                                Background="#FF1D1D1D"
+                                CornerRadius="5">
 
-                            <!-- Cover image -->
-                            <Image x:Name="GameCoverImage" Width="200" MinHeight="230" Stretch="Uniform"
-                                   VerticalAlignment="Top"
-                                   Source="{Binding ., Converter={StaticResource ThumbnailConverter}}" >
-                                <Image.Effect>
-                                    <DropShadowEffect Opacity="0.8"/>
-                                </Image.Effect>
-                            </Image>
+                            <!--<Border.Effect>
+                                <DropShadowEffect Opacity="0.5" />
+                            </Border.Effect>-->
 
-                            <!-- Game Action buttons -->
                             <Grid>
+                                <!-- Cover image -->
+                                <Image Margin="5" 
+                                       x:Name="GameCoverImage" 
+                                       Height="230" Width="200" Stretch="Uniform"
+                                       VerticalAlignment="Top"
+                                       Source="{Binding ., Converter={StaticResource ThumbnailConverter}}" >
+                                </Image>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                
-                                <StackPanel Grid.Row="1">
-                                    <Button Margin="5" Width="80" Name="LaunchGameBtn" Click="LaunchGameBtn_Click" Tag="{Binding Id}">Launch</Button>
-                                    <Button Margin="5" Width="80" Name="EditBtn" Click="EditBtn_Click" Tag="{Binding Id}">Edit</Button>
-                                </StackPanel>
+                                <!-- Game Action buttons -->
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="2">
-                                    <TextBlock  Text="{Binding Title}" TextWrapping="WrapWithOverflow" 
-                                               VerticalAlignment="Bottom"
-                                               Background="LightGray" />
+                                    <StackPanel Grid.Row="1">
+                                        <Button Margin="5" Width="80" Name="LaunchGameBtn" Click="LaunchGameBtn_Click" Tag="{Binding Id}">Launch</Button>
+                                        <Button Margin="5" Width="80" Name="EditBtn" Click="EditBtn_Click" Tag="{Binding Id}">Edit</Button>
+                                    </StackPanel>
+
+                                    <!-- Game title -->
+                                    <Grid Grid.Row="2" 
+                                          Background="LightGray" 
+                                          VerticalAlignment="Bottom">
+                                        
+                                        <TextBlock Text="{Binding Title}" TextWrapping="WrapWithOverflow" Margin="5,0,0,0"/>
+                                        
+                                    </Grid>
+
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+
+                                            <Setter Property="Opacity" Value="0" />
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=GameItemGrid, Path=IsMouseOver}" Value="true">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                             Duration="0:0:0.250" To="1.0" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+
+                                                    <DataTrigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                             Duration="0:0:0.250" To="0.0" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.ExitActions>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    
                                 </Grid>
 
-                                <Grid.Style>
-                                    <Style TargetType="Grid">
-
-                                        <Setter Property="Opacity" Value="0" />
-
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=GameItemGrid, Path=IsMouseOver}" Value="true">
-                                                <DataTrigger.EnterActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                             Duration="0:0:0.250" To="1.0" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.EnterActions>
-
-                                                <DataTrigger.ExitActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                             Duration="0:0:0.250" To="0.0" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.ExitActions>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Grid.Style>
-
                             </Grid>
-
-                        </Grid>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
@@ -182,7 +193,6 @@
                         <TextBlock Text="{Binding GameData.ItemsCollection/Description}"
                                    TextWrapping="Wrap"/>
                     </ScrollViewer>
-
                 </Grid>
 
             </Grid>

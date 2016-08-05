@@ -185,5 +185,19 @@ namespace GLEngine
             return File.Exists(filepath);
         }
 
+        public List<string> GetPlatforms()
+        {
+            var platforms = new List<string>();
+
+            foreach (var item in GetAllGames())
+            {
+                if (platforms.Contains(item.Platform) == false)
+                {
+                    platforms.Add(item.Platform);
+                }
+            }
+
+            return platforms;
+        }
     }
 }

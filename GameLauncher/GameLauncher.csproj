@@ -76,11 +76,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppState.cs" />
+    <Compile Include="Converter\EmptyStringToBooleanConverter.cs" />
     <Compile Include="Converter\FilePathToThumbnailConverter.cs" />
+    <Compile Include="Converter\RangeToBooleanConverter.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Model\BaseCollection.cs" />
     <Compile Include="Model\GameViewData.cs" />
     <Compile Include="Model\NavItem.cs" />
+    <Compile Include="Model\SelectionItem.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="PropertyChangedNotification.cs" />
     <Compile Include="ViewHandler.cs" />

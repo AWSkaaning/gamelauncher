@@ -30,5 +30,35 @@ namespace GameLauncher.View
             var dc = this.DataContext as ViewModel.GameViewModel;
             dc.GameData.SearchQuery = "";
         }
+
+        private void PlatformFilter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.ShowFilterMenu = !dc.ShowFilterMenu;
+        }
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.GameData.FilterUpdate();
+        }
+
+        private void FilterMenu_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.ShowFilterMenu = false;
+        }
+
+        private void DeselectAllBtn_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.GameData.DeselectAllPlatforms();
+        }
+
+        private void SelectAllPlatformsBtn_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var dc = this.DataContext as ViewModel.GameViewModel;
+            dc.GameData.SelectAllPlatforms();
+        }
     }
 }

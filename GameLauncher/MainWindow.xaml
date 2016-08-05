@@ -7,7 +7,7 @@
         xmlns:VM="clr-namespace:GameLauncher.ViewModel"
         xmlns:views="clr-namespace:GameLauncher.View"
         mc:Ignorable="d"
-        Title="GL" Height="400" Width="700" MinWidth="700"
+        Title="GameLauncher" Height="400" Width="700" MinWidth="700"
         DataContext="{Binding Main, Source={StaticResource Locator}}" Loaded="Window_Loaded" Closing="Window_Closing">
 
     <Window.Resources>

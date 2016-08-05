@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
 
 namespace GameLauncher.Model
 {
@@ -24,23 +27,50 @@ namespace GameLauncher.Model
             }
         }
 
+        public List<Model.SelectionItem> Platforms { get; set; }
+
         public GameViewData()
         {
+            Platforms = new List<Model.SelectionItem>();
+
             Items = GetGames();
-            UpdateCollection();
+            UpdateCollection();            
         }
 
         public override bool FilterController(object item)
         {
             var result = false;
 
-            if (SearchFilter(item))
+            if (SearchFilter(item) && PlatformFilter(item))
             {
                 result = true;
             }
 
             return result;
         }
+
+
+        public void SelectAllPlatforms()
+        {
+            foreach (var item in Platforms)
+            {
+                item.IsSelected = true;
+            }
+
+            FilterUpdate();
+        }
+
+        public void DeselectAllPlatforms()
+        {
+            foreach (var item in Platforms)
+            {
+                item.IsSelected = false;
+            }
+
+            FilterUpdate();
+        }
+
+
 
         private bool SearchFilter(object item)
         {
@@ -61,6 +91,29 @@ namespace GameLauncher.Model
 
             return result;
         }
+
+        private bool PlatformFilter(object item)
+        {
+            var result = false;
+
+            if (Platforms.Count > 0)
+            {
+                var game = item as GLEngine.Model.Game;
+                var gamePlatform = Platforms.Where(x => x.Caption == game.Platform).SingleOrDefault();
+
+                if (gamePlatform.IsSelected)
+                {
+                    result = true;
+                }
+            }
+            else
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
 
         private void UpdateCollection()
         {

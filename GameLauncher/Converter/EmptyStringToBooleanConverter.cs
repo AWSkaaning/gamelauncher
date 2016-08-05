@@ -8,19 +8,19 @@ using System.Windows.Data;
 
 namespace GameLauncher.Converter
 {
-    public class FilePathToThumbnailConverter : IValueConverter
+    public class EmptyStringToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var obj = value as GLEngine.Model.Game;
-            if (obj != null)
+            var result = false;
+
+            var str = value.ToString();
+            if (string.IsNullOrEmpty(str))
             {
-                return ImageHelper.GenerateThumbnail(obj.CoverImagePath, 200);
+                result = true;
             }
-            else
-            {
-                return null;
-            }
+
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

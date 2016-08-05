@@ -90,12 +90,9 @@ namespace GameLauncher.ViewModel
         {
             var platforms = new ObservableCollection<string>();
 
-            foreach (var item in AppState.GetInstance.GameController.GetAllGames())
+            foreach (var item in AppState.GetInstance.GameController.GetPlatforms())
             {
-                if (platforms.Contains(item.Platform) == false)
-                {
-                    platforms.Add(item.Platform);
-                }
+                platforms.Add(item);
             }
 
             return platforms;

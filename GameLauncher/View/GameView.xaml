@@ -5,76 +5,256 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:GameLauncher.View.GameViews"
              xmlns:local="clr-namespace:GameLauncher.View"
+             xmlns:conv="clr-namespace:GameLauncher.Converter"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="700">
 
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <conv:RangeToBooleanConverter x:Key="RangeToBoolConverter" />
+        <conv:EmptyStringToBooleanConverter x:Key="IsStringEmptyConverter" />
+    </UserControl.Resources>
 
-        <!-- View mode selector and search -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <!-- View select -->
-            
-            <!-- Search bar -->
-            <Border Grid.Column="1" Margin="5" Width="300" HorizontalAlignment="Right"
+    <Grid>
+
+        <!-- Main game view grid-->
+        <Grid Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!-- View mode selector and search -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="350"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Platform filter (trigger) -->
+                <Border Grid.Column="0"
+                        Name="PlatformFilter"
+                        Margin="5" 
+                        Width="300"
+                        HorizontalAlignment="Left"
+                        BorderThickness="1" 
+                        BorderBrush="LightGray" >
+
+                    <StackPanel Orientation="Horizontal"
+                                Background="White"
+                                MouseLeftButtonUp="PlatformFilter_MouseLeftButtonUp">
+
+                        <TextBlock Margin="5,0,225,0" Text="Platforms" />
+
+                        <Path x:Name="BtnArrow" 
+                          Margin="4" 
+                          VerticalAlignment="Center" 
+                          HorizontalAlignment="Right"
+                          Width="6" Fill="#FF527DB5" Stretch="Uniform" 
+                          Data="M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                    </StackPanel>
+
+                </Border>
+
+                <!-- Search bar -->
+                <Border Grid.Column="1" Margin="5" Width="300" HorizontalAlignment="Right"
                     CornerRadius="10" BorderBrush="LightGray" BorderThickness="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="20"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Icon -->
-                    <Image Grid.Column="0" Margin="5,0,0,0" Source="{StaticResource SearchIcon}" 
-                           Width="12" Height="12" Stretch="Uniform" HorizontalAlignment="Left" />
-                    
-                    <!-- Search box -->
-                    <TextBox Grid.Column="1" BorderThickness="0" Text="{Binding GameData.SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
-                    
-                    <!-- Delete search -->
-                    <Image Grid.Column="2" Source="{StaticResource DeleteIcon}" x:Name="ClearSearch"
-                           Width="12" Height="12" Stretch="Uniform" MouseUp="ClearSearch_MouseUp">
-                        <Image.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding GameData.SearchQuery}" Value="">
-                                        <Setter Property="Image.Opacity" Value="0" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
 
-                </Grid>
-            </Border>
-            
+                        <!-- Icon -->
+                        <Image Grid.Column="0" Margin="5,0,0,0" Source="{StaticResource SearchIcon}" 
+                           Width="12" Height="12" Stretch="Uniform" HorizontalAlignment="Left" />
+
+                        <!-- Search box -->
+                        <TextBox Grid.Column="1" BorderThickness="0" Text="{Binding GameData.SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <!-- Delete search -->
+                        <Image Grid.Column="2" Source="{StaticResource DeleteIcon}" x:Name="ClearSearch"
+                           Width="12" Height="12" Stretch="Uniform" MouseUp="ClearSearch_MouseUp">
+                            <Image.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GameData.SearchQuery}" Value="">
+                                            <Setter Property="Image.Opacity" Value="0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+            <!-- Game view -->
+            <ContentControl Grid.Row="1" Focusable="False" >
+                <ContentControl.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding BigIconView}" Value="true">
+                                <Setter Property="ContentControl.Content">
+                                    <Setter.Value>
+                                        <views:BigIconsView />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+
         </Grid>
 
-        <!-- Game view -->
-        <ContentControl Grid.Row="1" Focusable="False" >
-            <ContentControl.Style>
+        <!-- Platform filter dialog -->
+        <Border BorderBrush="LightGray"
+                Background="White"
+                Panel.ZIndex="2"
+                Name="FilterMenu"
+                Margin="5,25,5,5"
+                Width="{Binding ElementName=PlatformFilter, Path=ActualWidth}"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                MouseLeave="FilterMenu_MouseLeave">
+
+            <Border.Style>
+
                 <Style>
+
+                    <Setter Property="Border.BorderThickness" Value="0" />
+
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding BigIconView}" Value="true">
-                            <Setter Property="ContentControl.Content">
-                                <Setter.Value>
-                                    <views:BigIconsView />
-                                </Setter.Value>
-                            </Setter>
+
+                        <DataTrigger Binding="{Binding ElementName=FilterMenu, Path=ActualHeight, Converter={StaticResource RangeToBoolConverter}}" Value="false">
+                            <Setter Property="Border.BorderThickness" Value="0" />
                         </DataTrigger>
+
+                        <DataTrigger Binding="{Binding ElementName=FilterMenu, Path=ActualHeight, Converter={StaticResource RangeToBoolConverter}}" Value="true">
+                            <Setter Property="Border.BorderThickness" Value="1,0,1,1" />
+                        </DataTrigger>
+
                     </Style.Triggers>
                 </Style>
-            </ContentControl.Style>
-        </ContentControl>
+
+            </Border.Style>
+
+            <!-- Platform selection items -->
+            <Grid Name="PlatformItemsGrid" >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+
+                <!-- Quick select buttons -->
+                <Border Grid.Row="1"
+                        BorderThickness="0,1,0,0"
+                        BorderBrush="LightGray"
+                        Margin="0,5,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Name="DeselectAllPlatformsBtn" 
+                                   Margin="5,0,5,0" 
+                                   Text="Deselect all" 
+                                   Cursor="Hand" 
+                                   HorizontalAlignment="Right"
+                                   MouseLeftButtonUp="DeselectAllBtn_MouseLeftButtonUp" />
+                        
+                        <TextBlock Grid.Column="1" Name="SelectAllPlatformsBtn" 
+                                   Margin="5,0,5,0" 
+                                   Text="Select all" 
+                                   Cursor="Hand"
+                                   HorizontalAlignment="Left"
+                                   MouseLeftButtonUp="SelectAllPlatformsBtn_MouseLeftButtonUp" />
+
+                    </Grid>
+                </Border>
+
+                <!-- Platform items -->
+                <ScrollViewer Grid.Row="0"
+                              CanContentScroll="True"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+
+                    <ItemsControl ItemsSource="{Binding GameData.Platforms}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="5" IsChecked="{Binding IsSelected}" Click="CheckBox_Click">
+                                    <CheckBox.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Caption, Converter={StaticResource IsStringEmptyConverter}}" Value="true">
+                                                    <Setter Property="CheckBox.Content" Value="No platform" />
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding Caption, Converter={StaticResource IsStringEmptyConverter}}" Value="false">
+                                                    <Setter Property="CheckBox.Content" Value="{Binding Caption}" />
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+
+                        </ItemsControl.ItemsPanel>
+
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Dialog open/closing animation -->
+                <Grid.Style>
+                    <Style>
+
+                        <Setter Property="Grid.Height" Value="0" />
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShowFilterMenu}" Value="true">
+
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Height"
+                                                         From="0.0" To="300.0"
+                                                         Duration="0:0:0.150" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Height"
+                                                         From="300.0" To="0.0"
+                                                         Duration="0:0:0.150" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+
+                            </DataTrigger>
+
+                        </Style.Triggers>
+
+                    </Style>
+                </Grid.Style>
+
+            </Grid>
+
+        </Border>
 
     </Grid>
+
 </UserControl>
