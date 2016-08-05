@@ -6,3 +6,6 @@ gamelauncher aims to be a simple and easy game launcher for emulated games and p
 <sub>*Image from development version, appearance maybe subject to change. Game cover images are copyrighted to their respective owners.</sub>
 
 **Please note**: this is not an emulator! this is just a graphical launcher for the console commands.
+
+### Technical stuff
+Developed in C# with a WPF front-end GUI.
